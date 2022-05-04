@@ -1,3 +1,5 @@
+var async = require("async");
+
 var express = require('express');
 const knex = require('knex');
 const knexConfig = require('../knexfile.js');
@@ -40,6 +42,57 @@ router.get('/', (req, res) => {
     res.status(500).end();
   });
 });
+
+//Post a  entry of a training request through the req.body from a manager
+router.post('/', async (req, res) => {
+
+
+      pool.select('*').from('training').then((data) => {
+        let max = 0;
+        let training_data = data;
+        for (let i = 0; i < training_data.length; i++){
+          if (training_data[i].id > max){
+            max=training_data[i].id;
+          }
+        }
+        return max;
+      })
+      .then( id => {
+        id++;
+        const employees = req.body.emp_ids;
+        let attributes = req.body.attributes;
+        console.log(employees.length);
+        
+        let entries = [];
+        for (let i = 0; i < employees.length; i++){
+          entry = {};
+          entry.manager_id= attributes.manager_id;
+          entry.training_link= attributes.training_link;
+          entry.additional_info= attributes.additional_info;
+          entry.start_date= attributes.start_date;
+          entry.end_date= attributes.end_date;
+          entry.id = id+i;
+          entry.emp_id = employees[i];
+          entry.completed = 0;
+          entries.push(entry);
+        }
+        console.log(entries);
+        pool.insert(entries).into('training')
+          .then(() => { 
+            res.send(entries); 
+          })
+          .catch(() => { 
+            console.log("FAIL"); 
+          res.status(500).end();
+          });
+        }
+      )
+      .catch((err) => {
+        res.status(500).end();
+      });
+      res.status(200).end();
+    
+  });
 
 //Post a  entry of a training request through the req.body from a manager
 router.post('/:id', (req, res) => {
