@@ -13,11 +13,15 @@ router.post('/user', (req, res) => {
 	const password = req.body.password
 	pool.select('*').from("employees").where("email", username).then((data) =>{
 		if(!data){
-			return res.json({ status: 'not valid'})
+			res.json({ status: 'not valid'})
 		}
-	    if ( bcrypt.compare(password, data[0].password)) {
-			res.status(200).json({"list": (data)})
-		}
+	    bcrypt.compare(password, data[0].password, (err, resp) => {
+			if(resp) {
+				return res.status(200).json({"list": (data)})
+			} else {
+				return res.status(202).json({status: 'invalid credentials'})
+			}
+		})
 	}).catch((err) => {
     // Send a 500 (internal server error) if something goes wrong (rejected promises are not caught by express).
     res.status(500).end();

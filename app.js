@@ -15,6 +15,25 @@ app.use(express.urlencoded({ extended: true })); // parse body parameters as JSO
 // Routes
 //Save path of route files
 
+const cors = require('cors')
+// var app = express()
+app.use(cors())
+app.use(function (req, res, next) {
+  const allowedOrigins = [
+    "http://localhost:3080/main#",
+    // "http://localhost:3000",
+  ];
+  const origin = req.headers.origin;
+  if (allowedOrigins.includes(origin)) {
+    res.setHeader("Access-Control-Allow-Origin", 'http://localhost:3080/main#');
+  }
+  // res.header("Access-Control-Allow-Origin", "http://localhost:3000"); // update to match the domain you will make the request from
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept"
+  );
+  next();
+});
 
 //Url routes to file
 var employees = require('./routes/employees');

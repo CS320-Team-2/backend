@@ -12,8 +12,8 @@ const bcrypt = require('bcryptjs');
        ]);
      await knex('employees').del();
      await knex('employees').insert([
-       { id: 1, company_id: 1, manager_id: 2, 'first_name': 'Benjamin', 'last_name': 'Melz', email: 'bm@gmail.com', password: 'cs320', isManager: 0 },
-       { id: 2, company_id: 2, manager_id: 0, 'first_name': 'Heath', 'last_name': 'Brames', email: 'hb@gmail.com', password: 'cs320', isManager: 1}
+       { id: 1, company_id: 1, manager_id: 2, 'first_name': 'Benjamin', 'last_name': 'Melz', email: 'bm@gmail.com', password: bcrypt.hashSync('cs320'), isManager: 0 },
+       { id: 2, company_id: 2, manager_id: 0, 'first_name': 'Heath', 'last_name': 'Brames', email: 'hb@gmail.com', password: bcrypt.hashSync('cs320'), isManager: 1}
      ]);
     await knex('pto').del();
     await knex('pto').insert([
