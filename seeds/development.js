@@ -25,9 +25,9 @@ const bcrypt = require('bcryptjs');
     ]);
     await knex('performance').del();
     await knex('performance').insert([
-      { id: 1, from_employee:1, to_employee: 2, 'comments': 'good job', growth: 9, kindness: 10, delivery: 8},
-      { id: 2, from_employee:1, to_employee: 2, 'comments': 'awesome job', growth: 10, kindness: 10, delivery: 10},
-      { id: 3, from_employee:2, to_employee: 1, 'comments': 'good job', growth: 10, kindness: 10, delivery: 10},
+      { id: 1, from_employee:1, to_employee: 2, 'comments': 'good job', growth: 9, kindness: 10, delivery: 8, status: 0},
+      { id: 2, from_employee:1, to_employee: 2, 'comments': 'awesome job', growth: 10, kindness: 10, delivery: 10, status: 0},
+      { id: 3, from_employee:2, to_employee: 1, 'comments': 'good job', growth: 10, kindness: 10, delivery: 10, status: 0},
     ]);
     await knex('training').del();
     await knex('training').insert([

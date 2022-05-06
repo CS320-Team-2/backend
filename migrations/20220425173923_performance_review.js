@@ -11,6 +11,7 @@
       table.integer('growth').notNullable();
       table.integer('kindness').notNullable();
       table.integer('delivery').notNullable();
+      table.integer('status').notNullable();
     });
   };
   /**
