@@ -67,6 +67,53 @@ router.post('/', (req, res) => {
       });
   res.status(200).end();
 });
+
+//Update Performance Request with ID in req.body
+//Updated json with new attributes of perf request is passed in through req.body
+//New json can contain any number of attributes (any attributes not present will stay what they were before)
+//HOWEVER, the json must contain an ID or the system will return an error
+//Ex. sending a PUT request at URL localhost:3000/pto
+//with a req.body of     
+    // {
+    //     "id": 5,
+        // "growth": 9,
+        // "kindness": 10,
+    // }
+//would update the perf request with ID 5's growth to 9 etc (given that the other attributes were the same as before)
+
+router.put('/', (req, res) => {
+  //console.log(req.body);
+  const id = req.body.id;
+  pool("performance").where("id", id).update(req.body).then(function (count) {
+    //console.log(count);
+    res.send("successfully put");
+    res.status(200).end();
+  }).catch((err) => {
+    // Send a 500 (internal server error) if something goes wrong (rejected promises are not caught by express).
+    res.send("put error");
+    res.status(500).end();
+  })
+});
+
+//Update using id in url
+//Update Request based on ID
+//ID is passed in as a parameter through the URL
+//New updated entry is passed as a JSON in req.body
+//Ex. sending a PUT request at URL localhost:3000/performance/123 
+//with a req.body of {'delivery' = 1} 
+//would update delivery of the Perfornace request with ID 123 to 1
+router.put('/:id', (req, res) => {
+  const id = parseInt(req.params.id);
+  pool("performance").where("id", id).update(req.body).then(function (count) {
+    res.send("successfully put");
+    res.status(200).end();
+  }).catch((err) => {
+    // Send a 500 (internal server error) if something goes wrong (rejected promises are not caught by express).
+    res.send("put error");
+    res.status(500).end();
+  })
+});
+
 //Delete performance request based on ID
 //Ex. sending a delete request at URL
 router.delete('/:id', (req, res) => {
