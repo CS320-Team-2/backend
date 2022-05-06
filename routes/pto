@@ -5,9 +5,19 @@ const pool = knex(knexConfig);
 var router = express.Router();
 
 //Get incompleted/unapproved paid time off requests based for that manager ID
-router.get('/:id', (req, res) => {
+router.get('/manager/:id', (req, res) => {
   const id = parseInt(req.params.id);
   pool.select('*').from('pto').where("manager_id", id).andWhere("approved",0).then((data) => {
+    res.status(200).json({"list": data});
+  }).catch((err) => {
+    res.status(500).end();
+  });
+});
+
+//Get ALL paid time off requests based for that employee ID
+router.get('/employee/:id', (req, res) => {
+  const id = parseInt(req.params.id);
+  pool.select('*').from('pto').where("emp_id", id).then((data) => {
     res.status(200).json({"list": data});
   }).catch((err) => {
     res.status(500).end();
